@@ -1,0 +1,45 @@
+
+// ant-design-vue 样式变量覆盖
+@border-radius-base: 5px; // 组件/浮层圆角
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#app {
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+
+.ant-table-body {
+  overflow: auto;
+}
+
+.ant-modal-content, .ant-btn {
+  border-radius: 5px;
+}
+
+// DropdownMenu 样式
+.admins-dropdown-menu-overlay {
+  .ant-dropdown-menu-item {
+    color: #999;
+  }
+}

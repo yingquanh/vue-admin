@@ -146,9 +146,9 @@ export default defineComponent({
                 current: 9,
                 pageSize: 2,
                 pageSizeOptions: ['2', '50', '100', '150'],
-                showQuickJumper: true,
+                showQuickJumper: false,
                 showSizeChanger: true,
-                // showTotal: (total: number) => `总共 ${total} 条数据`
+                //showTotal: (total: number) => `共 ${total} 条记录`
             },
             loading: false,
         });

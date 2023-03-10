@@ -2,8 +2,8 @@ import axios from '@/utils/axios';
 
 // api地址
 const api = {
-    login: '/login',
-    logout: '/logout',
+    login: '/auth/login',
+    logout: '/auth/logout',
 }
 
 /**

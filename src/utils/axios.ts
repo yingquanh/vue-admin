@@ -1,9 +1,12 @@
 import axios from 'axios';
-// import Cookies from 'js-cookie';
 import router from '@/router';
+
+const token = localStorage.getItem('token') || '';
 
 const promiseQueues = [];
 let isRefreshing = false;
+
+axios.defaults.baseURL = 'http://127.0.0.1:5200/api/web';
 
 /** Setup request timeout */
 axios.defaults.timeout = 60000;
@@ -12,11 +15,11 @@ axios.defaults.timeout = 60000;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 // 刷新token
-const refreshToken = function () {
+/* const refreshToken = function () {
     return new Promise((resolve, reject) => {
         axios.post('/web/refresh', {}, {
             headers: {
-                // Authorization: Cookies.get('token')
+                Authorization: `Bearer ${store.accessToken}`
             }
         }).then(res => {
             resolve(res)
@@ -24,17 +27,17 @@ const refreshToken = function () {
             reject(err)
         })
     })
-}
+} */
 
 /** Http request interceptor (http请求拦截器) */
-/* axios.interceptors.request.use(
+axios.interceptors.request.use(
     config => {
-        config.headers.Authorization = Cookies.get('token');
+        config.headers.Authorization = `Bearer ${token}`
         return config;
     },
     err => {
         return Promise.reject(err);
-    }); */
+    });
 
 // Http响应拦截器
 axios.interceptors.response.use(

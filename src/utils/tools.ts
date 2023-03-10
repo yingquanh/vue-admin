@@ -3,7 +3,7 @@
  * 当前时间状态
  * @returns 
  */
-export const timeState = () => {
+export const timeState = (): string => {
     let timeNow = new Date();
     let hours = timeNow.getHours();
     // 判断当前时间段

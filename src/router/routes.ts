@@ -24,6 +24,8 @@ export default [
         meta: {
             title: '系统首页',
             showInbreadcrumb: true,
+            isNavigationMenu: false,
+            hasSubmenu: false,
         },
         component: Layout,
         children: [
@@ -33,6 +35,8 @@ export default [
                 meta: {
                     title: '仪表盘',
                     showInbreadcrumb: false,
+                    isNavigationMenu: false,
+                    hasSubmenu: false,
                 },
                 component: Dashboard
             },
@@ -42,6 +46,8 @@ export default [
                 meta: {
                     title: '系统设置',
                     showInbreadcrumb: true,
+                    isNavigationMenu: true,
+                    hasSubmenu: true,
                 },
                 redirect: { name: 'Role' },
                 children: [
@@ -51,14 +57,19 @@ export default [
                         meta: {
                             title: '角色管理',
                             showInbreadcrumb: true,
+                            isNavigationMenu: true,
+                            hasSubmenu: false,
                         },
+                        redirect: { name: 'RoleList' },
                         children: [
                             {
-                                path: '',
-                                name: 'RoleIndex',
+                                path: 'list',
+                                name: 'RoleList',
                                 meta: {
                                     title: '角色列表',
                                     showInbreadcrumb: false,
+                                    isNavigationMenu: false,
+                                    hasSubmenu: false,
                                 },
                                 component: Role
                             },
@@ -66,8 +77,10 @@ export default [
                                 path: 'create',
                                 name: 'CreateRole',
                                 meta: {
-                                    title: '新增角色',
+                                    title: '新建角色',
                                     showInbreadcrumb: true,
+                                    isNavigationMenu: false,
+                                    hasSubmenu: false,
                                 },
                                 component: CreateRole
                             },
@@ -77,6 +90,8 @@ export default [
                                 meta: {
                                     title: '编辑角色',
                                     showInbreadcrumb: true,
+                                    isNavigationMenu: false,
+                                    hasSubmenu: false,
                                 },
                                 component: EditRole
                             },
@@ -88,14 +103,19 @@ export default [
                         meta: {
                             title: '账号管理',
                             showInbreadcrumb: true,
+                            isNavigationMenu: true,
+                            hasSubmenu: false,
                         },
+                        redirect: { name: 'AccountList' },
                         children: [
                             {
-                                path: '',
-                                name: 'AccountIndex',
+                                path: 'list',
+                                name: 'AccountList',
                                 meta: {
                                     title: '账号列表',
                                     showInbreadcrumb: false,
+                                    isNavigationMenu: false,
+                                    hasSubmenu: false,
                                 },
                                 component: Account
                             },
@@ -105,6 +125,8 @@ export default [
                                 meta: {
                                     title: '新增账号',
                                     showInbreadcrumb: true,
+                                    isNavigationMenu: false,
+                                    hasSubmenu: false,
                                 },
                                 component: CreateAccount
                             },
@@ -114,6 +136,8 @@ export default [
                                 meta: {
                                     title: '编辑账号',
                                     showInbreadcrumb: true,
+                                    isNavigationMenu: false,
+                                    hasSubmenu: false,
                                 },
                                 component: EditAccount
                             },
@@ -128,6 +152,8 @@ export default [
                 meta: {
                     title: '示例',
                     showInbreadcrumb: true,
+                    isNavigationMenu: true,
+                    hasSubmenu: false,
                 },
                 component: Example
             },

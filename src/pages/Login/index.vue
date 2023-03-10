@@ -83,6 +83,7 @@ import { defineComponent, onMounted, reactive, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { notification } from 'ant-design-vue';
 import { timeState } from '@/utils/tools';
+import { useStore } from '@/store';
 import CryptoJS from '@/utils/crypto';
 import * as CommonServiceAPis from '@/apis/common';
 import * as AuthServiceAPis from '@/apis/auth';
@@ -90,6 +91,7 @@ export default defineComponent({
     name: 'Login',
     setup() {
         const router = useRouter();
+        const store = useStore();
         const state = reactive({
             formRef: null,
             formState: {
@@ -115,8 +117,8 @@ export default defineComponent({
                     validator: async (_rule: any, value: any) => {
                         if (value === '') {
                             return Promise.reject('请填写登录密码');
-                        } else if (!/^.{8,24}$/.test(value)) {
-                            return Promise.reject('登录密码长度为8~24个字符');
+                        } else if (!/^.{8,26}$/.test(value)) {
+                            return Promise.reject('登录密码长度为8~26个字符');
                         }
 
                         return Promise.resolve();
@@ -145,7 +147,7 @@ export default defineComponent({
             CommonServiceAPis.checkCode().then((res: any) => {
                 const { errcode, data } = res.data;
                 if (!errcode) {
-                    state.captcha = data;
+                    state.captcha = data.base64url;
                     state.captchaKey = res.headers['captcha-key'];
                 }
             }).catch((err: any) => [
@@ -169,8 +171,11 @@ export default defineComponent({
                         // 登录提示
                         notification.success({
                             message: "登录成功",
-                            description: `${timeState}, 欢迎回来!`,
+                            description: `${timeState()}, 欢迎回来!`,
                         });
+
+                        // 存储 token
+                        store.setAccessToken(data.token);
 
                         // 重定向页面
                         router.replace({name: 'Home'});
@@ -184,7 +189,7 @@ export default defineComponent({
                 }).catch((err: any) => {
                     // 错误提示
                     notification.error({
-                        message: '系统未知错误',
+                        message: '未知系统错误',
                         description: err.message
                     })
                 }).finally(() => {
@@ -197,7 +202,6 @@ export default defineComponent({
                 })
             }
         }
-
 
         onMounted(async () => {
             onReloadCaptcha();
@@ -212,6 +216,183 @@ export default defineComponent({
 })
 </script>
 
-<style lang="less">
-    @import './index.less';
+<style lang="less" scoped>
+.sign-flow-page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: url("@/assets/bg-login.svg") no-repeat center;
+    background-color: #eceff4;
+    overflow-y: auto;
+
+    .login-wrap {
+        position: absolute;
+        width: 900px;
+        height: 450px;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        background: url("@/assets/bg-sign.svg") no-repeat center;
+        box-shadow: 0 0 10px rgb(0 0 0 / .15);
+
+        :deep(.ant-card-body) {
+            display: flex;
+            height: 100%;
+            padding: 0;
+
+            .login-wrap-body-left {
+                position: relative;
+                width: 336px;
+                text-align: center;
+
+                .login-wrap-body-left__content {
+                    position: absolute;
+                    width: 320px;
+                    top: 40%;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-40%);
+                    -webkit-transform: translateX(-50%) translateY(-40%);
+
+                    .logo {
+                        height: 100px;
+                        line-height: 100px;
+                        
+                        img {
+                            width: 64px;
+                            height: 64px;
+                        }
+                    }
+
+                    .title {
+                        line-height: 30px;
+                        font-size: 22px;
+                        color: #fff;
+                        margin: 0;
+                    }
+
+                    .sub-title {
+                        line-height: 30px;
+                        font-size: 16px;
+                        color: #fff;
+                        margin: 0;
+                    }
+                }
+            }
+
+            .login-wrap-body-right {
+                position: relative;
+                flex: 1;
+
+                .login-wrap-body-right__content {
+                    position: absolute;
+                    width: 380px;
+                    top: 32%;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-32%);
+                    -webkit-transform: translateX(-50%) translateY(-32%);
+
+                    .header {
+                        height: 60px;
+                        line-height: 60px;
+                        text-align: left;
+                        margin-bottom: 8px;
+
+                        span {
+                            &:first-child {
+                                font-weight: 700;
+                                font-size: 18px;
+                                color: #666666;
+                            }
+
+                            &:last-child {
+                                font-weight: 400;
+                                font-size: 14px;
+                                color: #999999;
+                            }
+                        }
+                    }
+
+                    .ant-form {
+                        .ant-input-affix-wrapper {
+                            height: 50px;
+                            border-radius: 5px;
+                            background: transparent;
+
+                            .ant-input {
+                                background: transparent;
+                            }
+                        }
+
+                        .captcha-wrap {
+                            display: flex;
+
+                            .ant-input-affix-wrapper {
+                                flex: 1;
+                            }
+
+                            .captcha {
+                                position: relative;
+                                width: 124px;
+                                height: 50px;
+                                margin-left: 8px;
+
+                                .ant-image {
+                                    width: 100%;
+                                    height: 50px;
+                                    user-select: none;
+
+                                    .ant-image-img {
+                                        height: inherit;
+                                    }
+                                }
+
+                                &::after {
+                                    content: "";
+                                    position: absolute;
+                                    left: 0;
+                                    top: 0;
+                                    width: 100%;
+                                    height: 100%;
+                                    border: 1px solid rgba(228, 228, 228, 1);
+                                    border-radius: 5px;
+                                    -moz-box-shadow: none;
+                                    -webkit-box-shadow: none;
+                                    box-shadow: none;
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+
+                        
+
+                        .remember-forgot {
+                            display: flex;
+                            position: relative;
+                            top: -6px;
+                            margin-bottom: 8px;
+                            justify-content: space-between;
+
+                            .forgot-passwd {
+                                color: #409eff;
+                                font-size: 14px;
+                            }
+                        }
+
+                        .ant-btn {
+                            height: 50px;
+                            border-radius: 5px;
+
+                            span {
+                                font-size: 18px;
+                                font-weight: 700;
+                                font-style: normal;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 </style>

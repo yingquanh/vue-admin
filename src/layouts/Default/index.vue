@@ -47,7 +47,7 @@
                         </a-menu-item>
                     </a-sub-menu>
 
-                    <template v-for="menu in menus" :key="menu.id">
+                    <template v-for="menu:any in menus" :key="menu.id">
                         <!-- 没有二级菜单的 -->
                         <template v-if="!menu.children.length">
                             <a-menu-item :key="menu.route">
@@ -87,7 +87,14 @@
 
                 <!-- 内容区域 -->
                 <a-layout-content>
-                    <router-view />
+                    <router-view v-slot="{ Component, route }">
+                        <KeepAlive>
+                            <component 
+                                :is="Component" 
+                                :key="route.meta.usePathKey ? route.path : undefined"
+                            />
+                        </KeepAlive>
+                    </router-view>
                 </a-layout-content>
                 <!-- 内容区域 -->
 
@@ -125,10 +132,10 @@ export default defineComponent({
         // 监听路由变化事件
         watch(route, (newVal) => {
             // 侧边导航
-            let openKeys = [], selectedKeys = [];
-            const selectedMenus = newVal.matched.filter(route => { return route.meta.isSiderMenu });
+            let openKeys: any = [], selectedKeys: any = [];
+            const selectedMenus = newVal.matched.filter(route => { return route.meta.isNavigationMenu });
             selectedMenus.forEach(route => {
-                if (route.meta.hasSubMenu) {
+                if (route.meta.hasSubmenu) {
                     openKeys.push(route.name);
                 } else {
                     selectedKeys.push(route.name);
@@ -138,7 +145,7 @@ export default defineComponent({
             state.selectedKeys = selectedKeys;
 
             // 面包屑导航
-            state.breadcrumb = newVal.matched.filter(route => { return route.meta.showInbreadcrumb });
+            state.breadcrumb = <any>newVal.matched.filter(route => { return route.meta.showInbreadcrumb });
         });
 
         // 组件挂载之前生命钩子函数
@@ -149,10 +156,10 @@ export default defineComponent({
         // 组件挂载完成生命钩子函数
         onMounted(async () => {
             // 侧边导航
-            let openKeys = [], selectedKeys = [];
-            const selectedMenus = route.matched.filter(route => { return route.meta.isSiderMenu });
+            let openKeys: any = [], selectedKeys: any = [];
+            const selectedMenus = route.matched.filter(route => { return route.meta.isNavigationMenu });
             selectedMenus.forEach(route => {
-                if (route.meta.hasSubMenu) {
+                if (route.meta.hasSubmenu) {
                     openKeys.push(route.name);
                 } else {
                     selectedKeys.push(route.name);
@@ -162,7 +169,7 @@ export default defineComponent({
             state.selectedKeys = selectedKeys;
 
             // 面包屑导航
-            state.breadcrumb = route.matched.filter(route => { return route.meta.showInbreadcrumb });
+            state.breadcrumb = <any>route.matched.filter(route => { return route.meta.showInbreadcrumb });
 
         })
 
@@ -177,10 +184,10 @@ export default defineComponent({
 .layout-wrapper {
     height: 100vh;
 
-    .ant-layout-header {
+    :deep(.ant-layout-header) {
         padding: 0 16px;
         background: linear-gradient(140deg,#1891ff 20%,#40a9ff 50%,#00b4aa);
-        background: rgba(24, 145, 255, 1);
+        /* background: rgba(24, 145, 255, 1); */
 
         .logo {
             display: flex;
@@ -200,15 +207,13 @@ export default defineComponent({
                 margin: 0;
             }
         }
-
-        
     }
 
-    .ant-layout-sider {
+    :deep(.ant-layout-sider) {
         border-right: 1px solid #e9e9e9;
     }
 
-    .layout-wrap {
+    :deep(.layout-wrap) {
         .ant-breadcrumb {
             padding: 13.5px 24px;
             background: #fff;

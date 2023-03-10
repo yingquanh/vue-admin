@@ -1,6 +1,6 @@
 <template>
     <div class="admins-menu-wrapper">
-        <a-dropdown overlayClassName="admins-dropdown-menu-overlay" :trigger="['click', 'hover']">
+        <a-dropdown overlayClassName="admins-dropdown-menu-overlay" :trigger="['hover']">
             <span>
                 <div class="menu-dropdown-avatar">
                     <a-avatar :size="24">
@@ -112,6 +112,7 @@ export default defineComponent({
     width: 124px;
     font-size: 16px;
     color: #f2f2f2;
+    cursor: pointer;
 
     .menu-dropdown-avatar {
         float: left;

@@ -4,6 +4,7 @@ import router from './router'
 // import store from './store'
 import App from './App.vue'
 import Antd from 'ant-design-vue'
+import Components from './plugins/components'
 import * as Icons from "@ant-design/icons-vue"
 
 import 'ant-design-vue/es/message/style/css'
@@ -20,4 +21,8 @@ for (const i in icons) {
     // 循环注册组件
     app.component(i, icons[i]);
 }
-app.use(pinia).use(router).use(Antd).mount('#app')
+app.use(pinia)
+.use(router)
+.use(Antd)
+.use(Components)
+.mount('#app')

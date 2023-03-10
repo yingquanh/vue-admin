@@ -2,7 +2,7 @@ import axios from '@/utils/axios'
 
 // api地址
 const api = {
-    captcha: '/captcha',
+    captcha: '/common/captcha',
 }
 
 /**

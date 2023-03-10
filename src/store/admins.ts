@@ -19,7 +19,7 @@ export const useAuthAdminStore = defineStore('auth_admin', {
     },
     actions: {
         // 登出系统
-        adminLogoutSystem: () => {
+        adminLogoutSystem() {
             const router = useRouter();
             AuthServerAPis.logout({}).then((res: any) => {
                 const { errcode, errmsg } = res.data;
